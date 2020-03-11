@@ -1,0 +1,4 @@
+module.exports = {
+  slack_token: 'xoxb-...',
+  email_domain: 'mit.edu',
+};
