@@ -3,9 +3,9 @@ const { WebClient } = require('@slack/web-api');
 const config = require('./config');
 
 // staff, module.exports = [ ... staff usernames ... ]
-const staff = require('./list-staff');
+const staff = require('./sorting-hat-staff');
 // student groups, module.exports = [ [ ... staff & student usernames ... ], [ ... ], ... ]
-const student_groups = require('./list-students');
+const student_groups = require('./sorting-hat-students');
 
 async function main() {
   const slack = new WebClient(config.slack_token);
