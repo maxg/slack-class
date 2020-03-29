@@ -38,19 +38,25 @@ async function main() {
     types: 'public_channel',
     exclude_archived: true,
   });
+  let pairing_channel = channels.find(c => c.name === 'pairing');
   let question_channels = channels.filter(c => c.name.startsWith('questions-'));
   question_channels.sort((a, b) => a.name.localeCompare(b.name));
   console.log('questions channels:', question_channels.length);
   
+  await updateMembership(pairing_channel, new Set());
+  
   for (let ii = 0; ii < question_channels.length; ii++) {
     let group = (student_groups[ii] || []).map(u => users_by_username.get(u));
     let group_ids = new Set(group.map(u => u.id));
-    let { id, name } = question_channels[ii];
+    await updateMembership(question_channels[ii], group_ids);
+  }
+  
+  async function updateMembership({ id, name }, group_ids) {
     let { members } = await slack.conversations.members({ channel: id });
     let remove = members.filter(m => ! group_ids.has(m) && ! staff_ids.has(m) && ! bot_ids.has(m));
     let keep = members.filter(m => ! remove.includes(m));
     let add = [...group_ids].filter(m => ! members.includes(m));
-    console.log(name);
+    console.log('#' + name);
     console.log('  remove', remove.map(m => users_by_id.get(m).name));
     console.log('  keep', keep.map(m => users_by_id.get(m).name));
     console.log('  add', add.map(m => users_by_id.get(m).name));
