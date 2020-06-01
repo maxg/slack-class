@@ -4,6 +4,7 @@ const { WebClient } = require('@slack/web-api');
 
 const config = require('./config');
 
+// configuration, module.exports = { pairing: ..., questions: ... }
 const pairing = require('./matchmaker-pairing');
 
 async function main() {
